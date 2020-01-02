@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -48,12 +49,16 @@ class Controller {
     private Label pot_total;
     @FXML
     private TextArea moves;
+    @FXML
+    private TextField bet_input;
+    @FXML
+    private Button bet_submit;
 
     private Poker game = new Poker();
     private final Stage thisStage;
 
     private String movesText;
-    //TODO: Find a better way to keep track of the moves, because this is kinda awful
+    //TODO: Find a better way to display the moves, because this is kinda awful
 
     Controller() throws IOException{
         this.thisStage = new Stage();
@@ -87,9 +92,30 @@ class Controller {
                 }
             });
 
-            raise.setOnAction(e -> {
-                raise();
+            raise.setOnAction(e ->{
+
             });
+
+            bet_submit.setOnAction(e ->{
+                if(bet_input.getText() == null | checkBet(bet_input.getText())){
+                    game.setPlayerBet(Integer.parseInt(bet_input.getText())); //make this cleaner later, by making checkBet input string & return int
+                    setBetControlVisibility(false);
+                    System.out.println("Button works");
+                    if(game.getPhase() == 1){                       //If it is the start of the game,
+                        setBets();                                  //take and set bets , like normal
+                        try {
+                            deal();                                 //And also deal the cards
+                        } catch (FileNotFoundException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    else {                                          //If it is not the start of the game
+                         setBets();                                 //No need to deal cards
+                    }
+                }
+            });
+
+            raise.setOnAction(e -> raise());
     }
 
     private void check() throws InterruptedException, FileNotFoundException {
@@ -112,10 +138,16 @@ class Controller {
                     compare();
                     break;
             }
+        } else {
+            //player checks, opponent raises
+
         }
     }
 
-    private void compare(){
+    private void compare() throws FileNotFoundException {
+        oppcard1.setImage(new Image(new FileInputStream(game.getOpponentCards().get(0).getImage())));
+        System.out.println("Opp card 1: " + game.getOpponentCards().get(0).getImage());
+        oppcard2.setImage(new Image(new FileInputStream(game.getOpponentCards().get(1).getImage())));
         //game.compare();
     }
 
@@ -144,6 +176,13 @@ class Controller {
     private void play() throws IOException {
         play.setVisible(false);
         game.play();
+        setBetControlVisibility(true);
+
+
+
+    }
+
+    private void deal() throws FileNotFoundException {
         setBets();
         ArrayList<ArrayList<Card>> dealtCards = game.deal();
         playercard1.setImage(new Image(new FileInputStream(dealtCards.get(0).get(0).getImage())));
@@ -153,6 +192,7 @@ class Controller {
     }
 
     private void clearTable() throws FileNotFoundException {
+        setBetControlVisibility(false);
         //sets all card images to BLANK_CARD
         Image no_card = new Image(new FileInputStream("src\\resources\\BLANK_CARD.png"));
         flop1.setImage(no_card);
@@ -167,8 +207,18 @@ class Controller {
     }
 
     private void setBets(){
+        System.out.println(game.getOpponentBet());
         your_bet.setText("$" + game.getPlayerBet());
         opponent_bet.setText("$" + game.getOpponentBet());
         pot_total.setText("$" + game.getPotTotal());
+    }
+
+    private void setBetControlVisibility(Boolean b){
+        bet_input.setVisible(b);
+        bet_submit.setVisible(b);
+    }
+
+    private boolean checkBet(String a){
+        return true;
     }
 }

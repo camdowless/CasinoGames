@@ -7,7 +7,7 @@ import java.util.List;
 class Deck {
 
     private static ArrayList<Card> cards;
-    private List<Integer> valueList = Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12,13);
+    private List<Integer> valueList = Arrays.asList(14,2,3,4,5,6,7,8,9,10,11,12,13);
     private List<String> rankList = Arrays.asList("A","2","3","4","5","6","7","8","9","10","J","Q","K");
 
     Deck(){

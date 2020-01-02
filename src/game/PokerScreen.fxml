@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -100,11 +98,21 @@
                <Font name="Franklin Gothic Medium" size="19.0" />
            </font>
        </Label>
-      <Button fx:id="play" layoutX="864.0" layoutY="600.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="122.0" text="Play">
+       <Button fx:id="play" layoutX="864.0" layoutY="600.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="122.0" text="Play">
+           <font>
+             <Font name="Franklin Gothic Medium" size="36.0" />
+           </font>
+       </Button>
+       <TextArea fx:id="moves" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" />
+      <TextField fx:id="bet_input" layoutX="666.0" layoutY="540.0" promptText="Enter bet">
          <font>
-            <Font name="Franklin Gothic Medium" size="36.0" />
+            <Font name="Franklin Gothic Medium" size="19.0" />
+         </font>
+      </TextField>
+      <Button fx:id="bet_submit" layoutX="901.0" layoutY="543.0" mnemonicParsing="false" text="OK">
+         <font>
+            <Font name="Franklin Gothic Medium" size="16.0" />
          </font>
       </Button>
-      <TextArea fx:id="moves" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

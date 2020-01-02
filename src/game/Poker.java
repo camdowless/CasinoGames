@@ -1,5 +1,6 @@
 package game;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -40,13 +41,14 @@ class Poker {
         Ante();
     }
 
-    private void Ante(){
+    void Ante(){
         gamePhase++;
-        Scanner input = new Scanner(System.in);
+        System.out.println("Phase: " + gamePhase);
+        /*Scanner input = new Scanner(System.in);
         System.out.println("Enter bet");
-        playerBet = input.nextInt();
-        opponentBet = playerBet;
-        pot.addToPot(opponentBet + playerBet);
+        playerBet = input.nextInt(); */
+
+
 
     }
 
@@ -81,8 +83,7 @@ class Poker {
          gamePhase++;
          System.out.println("Phase: " + gamePhase);
         boolean opponentRaise = false;
-        Thread thread = new Thread();
-        thread.sleep(2000);
+        Thread.sleep(2000);
         gamePhase++;
         System.out.println("Phase: " + gamePhase);
         return opponentRaise;
@@ -92,8 +93,7 @@ class Poker {
         gamePhase++;
         System.out.println("Phase: " + gamePhase);
         boolean opponentRaise = false;
-        Thread thread = new Thread();
-        thread.sleep(2000);
+        Thread.sleep(2000);
         gamePhase++;
         System.out.println("Phase: " + gamePhase);
         return opponentRaise;
@@ -131,11 +131,19 @@ class Poker {
     int getPhase(){
         return gamePhase;
     }
-    private boolean checkBet(String a){
-        return true;
+
+    ArrayList<Card> getOpponentCards(){
+        return opponentCards;
     }
+
     int getPlayerBet(){
         return playerBet;
+    }
+
+    void setPlayerBet(int bet){
+        playerBet = bet;
+        opponentBet = playerBet; // change this later
+        pot.addToPot(opponentBet + playerBet);
     }
      int getOpponentBet(){
         return opponentBet;
