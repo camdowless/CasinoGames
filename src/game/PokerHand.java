@@ -1,13 +1,13 @@
 package game;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 class PokerHand {
     private ArrayList<Card> cards = new ArrayList<>();
     private int handScore;
     private String handType;
+    private int pairCount;
     /*
     10 - Royal Flush
      9 - Straight Flush
@@ -22,6 +22,7 @@ class PokerHand {
      */
 
     PokerHand(ArrayList<Card> hand, ArrayList<Card> flop, Card turn, Card river){
+        pairCount = 0;
         cards.addAll(hand);
         cards.addAll(flop);
         cards.add(turn);
@@ -34,93 +35,160 @@ class PokerHand {
         sortHand();
     }
 
-    private void calcScore(){
+     int calcScore(){
+        //TODO: Fix trickle down bug
         sortHand();
         if(checkRoyalFlush()){
             handScore = 10;
             handType = "Royal Flush";
+            return 1;
+        } else if(checkStraightFlush()){
+            handScore = 9;
+            handType = "Straight Flush";
+            return 1;
+        } else if(checkFourOfAKind()){
+            handScore = 8;
+            handType = "Four of a Kind";
+            return 1;
+        } else if(checkFullHouse()){
+            handScore = 7;
+            handType = "Full House";
+            return 1;
+        } else if(checkFlush()){
+            handScore = 6;
+            handType = "Flush";
+            return 1;
+        } else if(checkStraight()){
+            handScore = 5;
+            handType = "Straight";
+            return 1;
+        } else if(checkThreeOfAKind()){
+            handScore = 4;
+            handType = "Three of a Kind";
+            return 1;
+        } else if(checkTwoPair()){
+            handScore = 3;
+            handType = "Two Pair";
+            return 1;
+        } else if(checkPair()){
+            handScore = 2;
+            handType = "Pair";
+            return 1;
+        } else {
+            handScore = 1;
+            handType = String.format("High card %s", getHighCard());
+            return 1;
         }
     }
 
+     boolean checkFullHouse() {
+        if(checkThreeOfAKind() & checkPair()){
+            return true;
+        }
+        return false;
+    }
 
-    boolean checkRoyalFlush(){
+     boolean checkFourOfAKind() {
+        return ofAKind(4);
+    }
+
+     boolean checkThreeOfAKind(){
+        return ofAKind(3);
+    }
+
+     boolean checkTwoPair(){
+        findPairCount();
+        if(pairCount >= 2){
+            return true;
+        }
+        return false;
+    }
+
+     boolean checkPair(){
+        findPairCount();
+        if(pairCount == 1){
+            return true;
+        }
+        return false;
+    }
+
+     String getHighCard(){
+        Card high = new Card("", 0, "0");
+        for(Card c : cards){
+            if(c.getValue() > high.getValue()){
+                high = c;
+            }
+        }
+        return high.getRank();
+     }
+
+     boolean checkRoyalFlush(){
         sortHand();
-        //TODO: Remove sortHand()
         int index= 0;
         String suit;
-        for(Card c : cards){
-            if (c.getValue() == 10){
-                suit = c.getSuit();
+        try{
+            for(Card c : cards){
+                if (c.getValue() == 10){
+                    suit = c.getSuit();
                 /*
                     -cards.get(index + 1) is the next card in the sorted hand
                     -checks if it is a jack, value 11
                     -and if the suit is the same as the 10
                  */
-                if(cards.get(index + 1).getValue() == 11 & cards.get(index + 1).getSuit().equals(suit)){                //jack
-                    if(cards.get(index + 2).getValue() == 12 & cards.get(index + 2).getSuit().equals(suit)){            //queen
-                        if(cards.get(index + 3).getValue() == 13 & cards.get(index + 3).getSuit().equals(suit)){        //king
-                            if(cards.get(index + 4).getValue() == 14 & cards.get(index + 4).getSuit().equals(suit)){    //ace
-                                return true;
+                    if(cards.get(index + 1).getValue() == 11 & cards.get(index + 1).getSuit().equals(suit)){                //jack
+                        if(cards.get(index + 2).getValue() == 12 & cards.get(index + 2).getSuit().equals(suit)){            //queen
+                            if(cards.get(index + 3).getValue() == 13 & cards.get(index + 3).getSuit().equals(suit)){        //king
+                                if(cards.get(index + 4).getValue() == 14 & cards.get(index + 4).getSuit().equals(suit)){    //ace
+                                    return true;
+                                }
                             }
                         }
                     }
                 }
+                index++;
             }
-            index++;
+        }catch(IndexOutOfBoundsException e){
+            return false;
         }
         return false;
     }
 
-    boolean checkStraightFlush(){
+     boolean checkStraightFlush(){
         if(checkStraight() & checkFlush()){
             return true;
         }
         return false;
     }
 
-    boolean checkStraight(){
+     boolean checkStraight(){
         sortHand();
-        //TODO: Remove sorthand()
-        for(int i = 0; i < 3; i++){
-            int pairs = 0;
-            Card current = cards.get(i);
-            /*If anybody reads this, I am sorry its awful
-            Only need to loop through the first 3 cards, because a Straight requires 5
-            For every 1 of 3 cards, checks if value+1 = the next card's value, or a pair
-            Since it is possible to have up to 2 pairs and still have a straight, we check for that at the end
-            */
-            if(current.getValue() + 1 == cards.get(i + 1).getValue() | isPair(current, cards.get(i + 1))){
-                if(isPair(current, cards.get(i + 1))) {
-                    pairs++;
-                }
-                if(cards.get(i + 1).getValue() + 1 == cards.get(i + 2).getValue() | isPair(cards.get(i + 1), cards.get(i + 2))){
-                    if(isPair(cards.get(i + 1), cards.get(i + 2))){
-                        pairs++;
-                    }
-                    if(cards.get(i + 2).getValue() + 1 == cards.get(i + 3).getValue() | isPair(cards.get(i + 2), cards.get(i + 3))){
-                        if(isPair(cards.get(i + 2), cards.get(i + 3))){
-                            pairs++;
-                        }
-                        if(cards.get(i + 3).getValue() + 1 == cards.get(i + 4).getValue() | isPair(cards.get(i + 3), cards.get(i + 4))){
-                            if(isPair(cards.get(i + 1), cards.get(i + 2))){
-                                pairs++;
-                            }
-                            if(pairs <= 2){
+        ArrayList<Card> copy = cards;
+        Set<Integer> set = new HashSet<>(copy.size());
+        copy.removeIf(p -> !set.add(p.getValue()));
+        try{
+            for(int i = 0; i < 3; i++){
+                Card current = copy.get(i);
+                if(current.getValue() + 1 == cards.get(i + 1).getValue()){
+                    if(cards.get(i + 1).getValue() + 1 == cards.get(i + 2).getValue()){
+                        if(cards.get(i + 2).getValue() + 1 == cards.get(i + 3).getValue()){
+                            if(cards.get(i + 3).getValue() + 1 == cards.get(i + 4).getValue()){
                                 return true;
                             }
                         }
                     }
                 }
             }
+        } catch(IndexOutOfBoundsException e){
+            return false;
         }
         return false;
     }
 
-    boolean isPair(Card c1, Card c2){
+     boolean isPair(Card c1, Card c2){
         return c1.getValue() == c2.getValue();
     }
 
-    boolean checkFlush(){
+     boolean checkFlush(){
         int heartCount = 0;
         int diamondCount = 0;
         int clubCount = 0;
@@ -147,7 +215,50 @@ class PokerHand {
         return false;
     }
 
-    void sortHand(){
+     boolean ofAKind(int amount){
+        HashMap<String, Integer> pairs = new HashMap<>();
+        for(Card c : cards){
+            if(!pairs.containsKey(c.getRank())){
+                pairs.put(c.getRank(), 1);
+            } else{
+                int val = pairs.get(c.getRank());
+                pairs.replace(c.getRank(), val + 1);
+            }
+        }
+        Iterator it = pairs.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            int value = (int)pair.getValue();
+            if(value == amount){
+                return true;
+            }
+            it.remove();
+        }
+        return false;
+    }
+
+     void findPairCount(){
+        HashMap<String, Integer> pairs = new HashMap<>();
+        for(Card c : cards){
+            if(!pairs.containsKey(c.getRank())){
+                pairs.put(c.getRank(), 1);
+            } else{
+                int val = pairs.get(c.getRank());
+                pairs.replace(c.getRank(), val + 1);
+            }
+        }
+        Iterator it = pairs.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            int value = (int)pair.getValue();
+            if(value == 2){
+                pairCount++;
+            }
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+    }
+
+     void sortHand(){
         cards.sort(Card::compareTo);
     }
 
@@ -160,5 +271,13 @@ class PokerHand {
     void setCards(ArrayList<Card> hand){
         //used for testing
         cards = hand;
+    }
+
+    int getHandScore(){
+        return handScore;
+    }
+
+    String getHandType(){
+        return handType;
     }
 }

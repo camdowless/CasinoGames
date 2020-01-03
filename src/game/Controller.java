@@ -148,7 +148,8 @@ class Controller {
         oppcard1.setImage(new Image(new FileInputStream(game.getOpponentCards().get(0).getImage())));
         System.out.println("Opp card 1: " + game.getOpponentCards().get(0).getImage());
         oppcard2.setImage(new Image(new FileInputStream(game.getOpponentCards().get(1).getImage())));
-        //game.compare();
+        game.compareHands();
+        play.setVisible(true);
     }
 
     private void turn() throws FileNotFoundException {
@@ -175,10 +176,9 @@ class Controller {
 
     private void play() throws IOException {
         play.setVisible(false);
+        clearTable();
         game.play();
         setBetControlVisibility(true);
-
-
 
     }
 

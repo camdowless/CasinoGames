@@ -1,8 +1,6 @@
 package game;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 class Poker {
     private Deck deck = new Deck();
@@ -37,7 +35,13 @@ class Poker {
         this.pot = new Pot();
     }
 
-    void play()   {
+    void play(){
+        playerCards.clear();
+        opponentCards.clear();
+        flopCards.clear();
+        turnCard = null;
+        riverCard = null;
+        gamePhase = 0;
         Ante();
     }
 
@@ -47,9 +51,6 @@ class Poker {
         /*Scanner input = new Scanner(System.in);
         System.out.println("Enter bet");
         playerBet = input.nextInt(); */
-
-
-
     }
 
     ArrayList<ArrayList<Card>> deal(){
@@ -78,6 +79,9 @@ class Poker {
         cards.add(opponentCards);
         return cards;
     }
+
+    //TODO: When comparing hands, if the player and the dealer have the same hand score,
+    //TODO: add up the 5 cards and give winnings to the higher total
 
      boolean playerCheck() throws InterruptedException {
          gamePhase++;
@@ -125,7 +129,15 @@ class Poker {
     void compareHands(){
         PokerHand playerHand = new PokerHand(playerCards, flopCards, turnCard, riverCard);
         PokerHand oppHand = new PokerHand(opponentCards, flopCards,turnCard,riverCard);
-
+        System.out.printf("Player hand: %s    Score: %d\n", playerHand.getHandType(), playerHand.getHandScore());
+        System.out.printf("Opponent hand: %s    Score: %d", oppHand.getHandType(), oppHand.getHandScore());
+        if(playerHand.getHandScore() > oppHand.getHandScore()){
+            System.out.println("Player Wins");
+        } else if(playerHand.getHandScore() < oppHand.getHandScore()){
+            System.out.println("Opponent Wins");
+        } else {
+            System.out.println("Tie");
+        }
     }
 
     int getPhase(){
