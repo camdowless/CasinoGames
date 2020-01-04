@@ -32,7 +32,12 @@ class Deck {
     static Card draw(){
         return cards.remove(0);
     }
-
+    void checkLowDeck(){
+        if (cards.size() < 10){
+            cards.clear();
+            init();
+        }
+    }
     //only used for testing
     public ArrayList<Card> getDeck(){
         return cards;

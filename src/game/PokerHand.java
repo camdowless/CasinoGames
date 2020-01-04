@@ -1,13 +1,17 @@
 package game;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 class PokerHand {
-    private ArrayList<Card> cards = new ArrayList<>();
+    private ArrayList<Card> cards7 = new ArrayList<>();
     private int handScore;
     private String handType;
-    private int pairCount;
+    private String highCardRank;
+    private int highCardValue;
+    private ArrayList<Card> hand;
+    private ArrayList<Card> flop;
+    private Card turn;
+    private Card river;
     /*
     10 - Royal Flush
      9 - Straight Flush
@@ -22,108 +26,122 @@ class PokerHand {
      */
 
     PokerHand(ArrayList<Card> hand, ArrayList<Card> flop, Card turn, Card river){
-        pairCount = 0;
-        cards.addAll(hand);
-        cards.addAll(flop);
-        cards.add(turn);
-        cards.add(river);
-        calcScore();
+        this.hand = hand;
+        this.flop = flop;
+        this.turn = turn;
+        this.river = river;
+
+        cards7.addAll(hand);
+        cards7.addAll(flop);
+        cards7.add(turn);
+        cards7.add(river);
+        highCardRank = findHighCardRank(cards7);
+        highCardValue = findHighCardValue(cards7);
+        calcScore(cards7);
     }
 
     PokerHand(){
-        //used for testing
-        sortHand();
+        sortHand(cards7);
     }
 
-     int calcScore(){
-        //TODO: Fix trickle down bug
-        sortHand();
-        if(checkRoyalFlush()){
-            handScore = 10;
-            handType = "Royal Flush";
-            return 1;
-        } else if(checkStraightFlush()){
-            handScore = 9;
-            handType = "Straight Flush";
-            return 1;
-        } else if(checkFourOfAKind()){
-            handScore = 8;
-            handType = "Four of a Kind";
-            return 1;
-        } else if(checkFullHouse()){
-            handScore = 7;
-            handType = "Full House";
-            return 1;
-        } else if(checkFlush()){
-            handScore = 6;
-            handType = "Flush";
-            return 1;
-        } else if(checkStraight()){
-            handScore = 5;
-            handType = "Straight";
-            return 1;
-        } else if(checkThreeOfAKind()){
-            handScore = 4;
-            handType = "Three of a Kind";
-            return 1;
-        } else if(checkTwoPair()){
-            handScore = 3;
-            handType = "Two Pair";
-            return 1;
-        } else if(checkPair()){
-            handScore = 2;
-            handType = "Pair";
-            return 1;
-        } else {
-            handScore = 1;
-            handType = String.format("High card %s", getHighCard());
-            return 1;
-        }
-    }
+     void calcScore(ArrayList<Card> cards){
+        printCards();
+        sortHand(cards);
+         handScore = 1;
+         handType = String.format("High card %s", highCardRank);
+         if(checkPair(cards)){
+             handScore = 2;
+             handType = "Pair";
+         } else if(checkTwoPair(cards)){
+             handScore = 3;
+             handType = "Two Pair";
+         } else if(checkThreeOfAKind(cards)){
+             handScore = 4;
+             handType = "Three of a Kind";
+         } else if(checkStraight(cards)){
+             handScore = 5;
+             handType = "Straight";
+         } else if(checkFlush(cards)){
+             handScore = 6;
+             handType = "Flush";
+         } else if(checkFullHouse(cards)){
+             handScore = 7;
+             handType = "Full House";
+         } else if(checkFourOfAKind(cards)){
+             handScore = 8;
+             handType = "Four of a Kind";
+         } else if(checkStraightFlush(cards)){
+             handScore = 9;
+             handType = "Straight Flush";
+         } else if(checkRoyalFlush(cards)){
+             handScore = 10;
+             handType = "Royal Flush";
+         }
+     }
 
-     boolean checkFullHouse() {
-        if(checkThreeOfAKind() & checkPair()){
+     void calc2Score(ArrayList<Card> cards){
+         handScore = 1;
+         handType = String.format("High card %s", highCardRank);
+         if(checkPair(cards)){
+             handScore = 2;
+             handType = "Pair";
+         }
+     }
+
+     boolean checkFullHouse(ArrayList<Card> cards) {
+        if(checkThreeOfAKind(cards) & checkPair(cards)){
             return true;
         }
         return false;
     }
 
-     boolean checkFourOfAKind() {
-        return ofAKind(4);
+     boolean checkFourOfAKind(ArrayList<Card> cards) {
+        return ofAKind(4, cards);
     }
 
-     boolean checkThreeOfAKind(){
-        return ofAKind(3);
+     boolean checkThreeOfAKind(ArrayList<Card> cards){
+        return ofAKind(3, cards);
     }
 
-     boolean checkTwoPair(){
-        findPairCount();
-        if(pairCount >= 2){
+     boolean checkTwoPair(ArrayList<Card> cards){
+        findPairCount(cards);
+        if(findPairCount(cards) >= 2){
             return true;
         }
         return false;
     }
 
-     boolean checkPair(){
-        findPairCount();
-        if(pairCount == 1){
+     boolean checkPair(ArrayList<Card> cards){
+        findPairCount(cards);
+        if(findPairCount(cards) == 1){
             return true;
         }
         return false;
     }
 
-     String getHighCard(){
+     String findHighCardRank(ArrayList<Card> cardList){
         Card high = new Card("", 0, "0");
-        for(Card c : cards){
+        for(Card c : cardList){
             if(c.getValue() > high.getValue()){
                 high = c;
             }
         }
+        highCardValue = high.getValue();
         return high.getRank();
      }
 
-     boolean checkRoyalFlush(){
-        sortHand();
+    int findHighCardValue(ArrayList<Card> cardList){
+        Card high = new Card("", 0, "0");
+        for(Card c : cardList){
+            if(c.getValue() > high.getValue()){
+                high = c;
+            }
+        }
+        return high.getValue();
+    }
+
+     boolean checkRoyalFlush(ArrayList<Card> cards){
+        sortHand(cards);
         int index= 0;
         String suit;
         try{
@@ -153,15 +171,15 @@ class PokerHand {
         return false;
     }
 
-     boolean checkStraightFlush(){
-        if(checkStraight() & checkFlush()){
+     boolean checkStraightFlush(ArrayList<Card> cards){
+        if(checkStraight(cards) & checkFlush(cards)){
             return true;
         }
         return false;
     }
 
-     boolean checkStraight(){
-        sortHand();
+     boolean checkStraight(ArrayList<Card> cards){
+        sortHand(cards);
         ArrayList<Card> copy = cards;
         Set<Integer> set = new HashSet<>(copy.size());
         copy.removeIf(p -> !set.add(p.getValue()));
@@ -188,7 +206,7 @@ class PokerHand {
         return c1.getValue() == c2.getValue();
     }
 
-     boolean checkFlush(){
+     boolean checkFlush(ArrayList<Card> cards){
         int heartCount = 0;
         int diamondCount = 0;
         int clubCount = 0;
@@ -215,7 +233,7 @@ class PokerHand {
         return false;
     }
 
-     boolean ofAKind(int amount){
+     boolean ofAKind(int amount, ArrayList<Card> cards){
         HashMap<String, Integer> pairs = new HashMap<>();
         for(Card c : cards){
             if(!pairs.containsKey(c.getRank())){
@@ -237,7 +255,8 @@ class PokerHand {
         return false;
     }
 
-     void findPairCount(){
+     int findPairCount(ArrayList<Card> cards){
+        int pairCount = 0;
         HashMap<String, Integer> pairs = new HashMap<>();
         for(Card c : cards){
             if(!pairs.containsKey(c.getRank())){
@@ -256,21 +275,27 @@ class PokerHand {
             }
             it.remove(); // avoids a ConcurrentModificationException
         }
+        return pairCount;
     }
 
-     void sortHand(){
+     void sortHand(ArrayList<Card> cards){
         cards.sort(Card::compareTo);
     }
 
+    int getHighCardValue(){
+        //Used in Poker.compareHands()
+        return highCardValue;
+    }
+
     void printCards(){
-        for(Card c : cards){
+        for(Card c : cards7){
             System.out.printf("%s of %s\n", c.getRank(), c.getSuit());
         }
     }
 
     void setCards(ArrayList<Card> hand){
         //used for testing
-        cards = hand;
+        cards7 = hand;
     }
 
     int getHandScore(){

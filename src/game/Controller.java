@@ -53,6 +53,10 @@ class Controller {
     private TextField bet_input;
     @FXML
     private Button bet_submit;
+    @FXML
+    private Label player_bankroll;
+    @FXML
+    private Label opp_bankroll;
 
     private Poker game = new Poker();
     private final Stage thisStage;
@@ -74,48 +78,55 @@ class Controller {
 
     @FXML
     private void initialize() throws IOException {
-            clearTable();
-            movesText = "";
-            play.setOnAction(e -> {
-                try {
-                    play();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            });
+        moves.setEditable(false);
+        check.setVisible(false);
+        raise.setVisible(false);
+        fold.setVisible(false);
+        clearTable();
+        movesText = "";
+        play.setOnAction(e -> {
+            try {
+                play();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
 
-            check.setOnAction(e -> {
-                try {
-                    check();
-                } catch (InterruptedException | FileNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-            });
+        check.setOnAction(e -> {
+            try {
+                check();
+            } catch (InterruptedException | FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        });
 
-            raise.setOnAction(e ->{
+        raise.setOnAction(e ->{
 
-            });
+        });
 
-            bet_submit.setOnAction(e ->{
-                if(bet_input.getText() == null | checkBet(bet_input.getText())){
-                    game.setPlayerBet(Integer.parseInt(bet_input.getText())); //make this cleaner later, by making checkBet input string & return int
-                    setBetControlVisibility(false);
-                    System.out.println("Button works");
-                    if(game.getPhase() == 1){                       //If it is the start of the game,
-                        setBets();                                  //take and set bets , like normal
-                        try {
-                            deal();                                 //And also deal the cards
-                        } catch (FileNotFoundException ex) {
-                            ex.printStackTrace();
-                        }
+        fold.setOnAction(e ->{
+            fold();
+        });
+
+        bet_submit.setOnAction(e ->{
+            if(bet_input.getText() == null | checkBet(bet_input.getText())){
+                game.setPlayerBet(Integer.parseInt(bet_input.getText())); //make this cleaner later, by making checkBet input string & return int
+                setBetControlVisibility(false);
+                if(game.getPhase() == 1){                       //If it is the start of the game,
+                    setBets();                                  //take and set bets , like normal
+                    try {
+                        deal();                                 //And also deal the cards
+                    } catch (FileNotFoundException ex) {
+                        ex.printStackTrace();
                     }
-                    else {                                          //If it is not the start of the game
-                         setBets();                                 //No need to deal cards
-                    }
                 }
-            });
+                else {                                          //If it is not the start of the game
+                     setBets();                                 //No need to deal cards
+                }
+            }
+        });
 
-            raise.setOnAction(e -> raise());
+        raise.setOnAction(e -> raise());
     }
 
     private void check() throws InterruptedException, FileNotFoundException {
@@ -149,20 +160,23 @@ class Controller {
         System.out.println("Opp card 1: " + game.getOpponentCards().get(0).getImage());
         oppcard2.setImage(new Image(new FileInputStream(game.getOpponentCards().get(1).getImage())));
         game.compareHands();
-        play.setVisible(true);
+        endGame();
     }
 
     private void turn() throws FileNotFoundException {
+        clearBets();
         Card turnCard = game.turn();
         turn.setImage(new Image(new FileInputStream(turnCard.getImage())));
     }
 
     private void river() throws FileNotFoundException {
+        clearBets();
         Card riverCard = game.river();
         river.setImage(new Image(new FileInputStream(riverCard.getImage())));
     }
 
     private void flop() throws FileNotFoundException {
+        clearBets();
         ArrayList<Card> flopCards = game.flop();
         flop1.setImage(new Image(new FileInputStream(flopCards.get(0).getImage())));
         flop2.setImage(new Image(new FileInputStream(flopCards.get(1).getImage())));
@@ -174,12 +188,28 @@ class Controller {
 
     }
 
+    private void fold(){
+        game.playerFold();
+        endGame();
+    }
+
     private void play() throws IOException {
+        check.setVisible(true);
+        raise.setVisible(true);
+        fold.setVisible(true);
+        player_bankroll.setText("$" + game.getPlayerMoney());
+        opp_bankroll.setText("$" + game.getOpponentMoney());
+        pot_total.setText("");
         play.setVisible(false);
         clearTable();
+        movesText = "";
+        setMovesTextGUI(movesText);
         game.play();
         setBetControlVisibility(true);
+    }
 
+    private void setMovesTextGUI(String input){
+        moves.setText(input);
     }
 
     private void deal() throws FileNotFoundException {
@@ -210,12 +240,25 @@ class Controller {
         System.out.println(game.getOpponentBet());
         your_bet.setText("$" + game.getPlayerBet());
         opponent_bet.setText("$" + game.getOpponentBet());
+        player_bankroll.setText("$" + game.getPlayerMoney());
+        opp_bankroll.setText("$" + game.getOpponentMoney());
         pot_total.setText("$" + game.getPotTotal());
     }
 
+    private void clearBets(){
+        your_bet.setText("");
+        opponent_bet.setText("");
+
+    }
     private void setBetControlVisibility(Boolean b){
         bet_input.setVisible(b);
         bet_submit.setVisible(b);
+    }
+
+    private void endGame(){
+        movesText += game.getGameOutcome();
+        setMovesTextGUI(movesText);
+        play.setVisible(true);
     }
 
     private boolean checkBet(String a){

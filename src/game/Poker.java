@@ -10,10 +10,15 @@ class Poker {
     private Card riverCard;
     private ArrayList<Card> playerCards = new ArrayList<>();
     private ArrayList<Card> opponentCards = new ArrayList<>();
+    private PokerHand playerHand;
+    private PokerHand oppHand;
     private int playerBet;
     private int opponentBet;
-
+    private int playerMoney;
+    private int opponentMoney;
+    private boolean fold = false;
     private int gamePhase = 0;
+    private String gameOutcome;
     /*
     0 is the start, first bets
     1 is the cards being dealt
@@ -33,6 +38,8 @@ class Poker {
 
     Poker() throws IOException {
         this.pot = new Pot();
+        playerMoney = 500;
+        opponentMoney = 500;
     }
 
     void play(){
@@ -56,6 +63,7 @@ class Poker {
     ArrayList<ArrayList<Card>> deal(){
         gamePhase++;
         System.out.println("Phase: " + gamePhase);
+        deck.checkLowDeck();
         Card p1 = Deck.draw();
         Card p2 = Deck.draw();
         playerCards.add(p1);
@@ -80,14 +88,10 @@ class Poker {
         return cards;
     }
 
-    //TODO: When comparing hands, if the player and the dealer have the same hand score,
-    //TODO: add up the 5 cards and give winnings to the higher total
-
      boolean playerCheck() throws InterruptedException {
          gamePhase++;
          System.out.println("Phase: " + gamePhase);
         boolean opponentRaise = false;
-        Thread.sleep(2000);
         gamePhase++;
         System.out.println("Phase: " + gamePhase);
         return opponentRaise;
@@ -97,7 +101,6 @@ class Poker {
         gamePhase++;
         System.out.println("Phase: " + gamePhase);
         boolean opponentRaise = false;
-        Thread.sleep(2000);
         gamePhase++;
         System.out.println("Phase: " + gamePhase);
         return opponentRaise;
@@ -127,21 +130,66 @@ class Poker {
     }
 
     void compareHands(){
-        PokerHand playerHand = new PokerHand(playerCards, flopCards, turnCard, riverCard);
-        PokerHand oppHand = new PokerHand(opponentCards, flopCards,turnCard,riverCard);
+        playerHand = new PokerHand(playerCards, flopCards, turnCard, riverCard);
+        oppHand = new PokerHand(opponentCards, flopCards,turnCard,riverCard);
         System.out.printf("Player hand: %s    Score: %d\n", playerHand.getHandType(), playerHand.getHandScore());
-        System.out.printf("Opponent hand: %s    Score: %d", oppHand.getHandType(), oppHand.getHandScore());
+        System.out.printf("Opponent hand: %s    Score: %d\n", oppHand.getHandType(), oppHand.getHandScore());
         if(playerHand.getHandScore() > oppHand.getHandScore()){
-            System.out.println("Player Wins");
+            playerWin();
         } else if(playerHand.getHandScore() < oppHand.getHandScore()){
-            System.out.println("Opponent Wins");
+            opponentWin();
         } else {
-            System.out.println("Tie");
+            //Player hand score == Opponent hand score, so we can use playerHand for the switch
+            int playerHighCard = playerHand.getHighCardValue();
+            int oppHighCard = oppHand.getHighCardValue();
+            if(playerHighCard > oppHighCard){
+                playerWin();
+            } else if(playerHighCard < oppHighCard){
+                opponentWin();
+            } else {
+                //TODO: If highcards are equal, get second high card, if they are equal, split the pot
+            }
         }
+    }
+
+    void playerFold(){
+        fold = true;
+        gameOutcome = "\nPlayer folds\n";
+        opponentWin();
+    }
+
+    void opponentFold(){
+        fold = true;
+        gameOutcome = "\nOpponent folds\n";
+        playerWin();
+    }
+
+    void playerWin(){
+        if(!fold) {
+            gameOutcome = String.format("\nPlayer wins with a %s\n", playerHand.getHandType());
+        }
+        playerMoney += getPotTotal();
+        pot.resetPot();
+    }
+
+    void opponentWin(){
+        if(!fold){
+            gameOutcome = String.format("\nOpponent wins with a %s\n", oppHand.getHandType());
+        }
+        opponentMoney += getPotTotal();
+        pot.resetPot();
     }
 
     int getPhase(){
         return gamePhase;
+    }
+
+    int getPlayerMoney(){
+        return playerMoney;
+    }
+
+    int getOpponentMoney(){
+        return opponentMoney;
     }
 
     ArrayList<Card> getOpponentCards(){
@@ -155,12 +203,20 @@ class Poker {
     void setPlayerBet(int bet){
         playerBet = bet;
         opponentBet = playerBet; // change this later
+        playerMoney -= bet;
+        opponentMoney -= bet;
         pot.addToPot(opponentBet + playerBet);
     }
-     int getOpponentBet(){
+
+    String getGameOutcome(){
+        return gameOutcome;
+    }
+
+    int getOpponentBet(){
         return opponentBet;
     }
-     int getPotTotal(){
+
+    int getPotTotal(){
         return pot.getPotTotal();
     }
 }

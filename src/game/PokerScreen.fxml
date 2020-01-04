@@ -58,7 +58,7 @@
                <Font name="Franklin Gothic Medium" size="19.0" />
            </font>
        </Button>
-       <Label fx:id="bankroll" layoutX="148.0" layoutY="636.0" text="\$">
+       <Label fx:id="opp_bankroll" layoutX="237.0" layoutY="23.0">
            <font>
                <Font name="Franklin Gothic Medium" size="20.0" />
            </font>
@@ -83,17 +83,17 @@
                <Font name="Franklin Gothic Medium" size="19.0" />
            </font>
        </Label>
-       <Label fx:id="pot_total" layoutX="821.0" layoutY="229.0" text="\$">
+       <Label fx:id="pot_total" layoutX="821.0" layoutY="229.0">
            <font>
                <Font name="Franklin Gothic Medium" size="19.0" />
            </font>
        </Label>
-       <Label fx:id="your_bet" layoutX="425.0" layoutY="463.0" text="\$">
+       <Label fx:id="your_bet" layoutX="425.0" layoutY="463.0">
            <font>
                <Font name="Franklin Gothic Medium" size="19.0" />
            </font>
        </Label>
-       <Label fx:id="opponent_bet" layoutX="425.0" layoutY="195.0" text="\$">
+       <Label fx:id="opponent_bet" layoutX="425.0" layoutY="195.0">
            <font>
                <Font name="Franklin Gothic Medium" size="19.0" />
            </font>
@@ -114,5 +114,10 @@
             <Font name="Franklin Gothic Medium" size="16.0" />
          </font>
       </Button>
+      <Label fx:id="player_bankroll" layoutX="159.0" layoutY="639.0">
+         <font>
+            <Font name="Franklin Gothic Medium" size="20.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
