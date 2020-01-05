@@ -1,4 +1,6 @@
 package game;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -58,11 +60,9 @@ class Controller {
     @FXML
     private Label opp_bankroll;
 
+
     private Poker game = new Poker();
     private final Stage thisStage;
-
-    private String movesText;
-    //TODO: Find a better way to display the moves, because this is kinda awful
 
     Controller() throws IOException{
         this.thisStage = new Stage();
@@ -83,7 +83,6 @@ class Controller {
         raise.setVisible(false);
         fold.setVisible(false);
         clearTable();
-        movesText = "";
         play.setOnAction(e -> {
             try {
                 play();
@@ -104,16 +103,18 @@ class Controller {
 
         });
 
-        fold.setOnAction(e ->{
-            fold();
-        });
+        fold.setOnAction(e -> fold());
 
         bet_submit.setOnAction(e ->{
             if(bet_input.getText() == null | checkBet(bet_input.getText())){
                 game.setPlayerBet(Integer.parseInt(bet_input.getText())); //make this cleaner later, by making checkBet input string & return int
                 setBetControlVisibility(false);
                 if(game.getPhase() == 1){                       //If it is the start of the game,
-                    setBets();                                  //take and set bets , like normal
+                    try {
+                        setBets();                                  //take and set bets , like normal
+                    } catch (FileNotFoundException ex) {
+                        ex.printStackTrace();
+                    }
                     try {
                         deal();                                 //And also deal the cards
                     } catch (FileNotFoundException ex) {
@@ -121,37 +122,57 @@ class Controller {
                     }
                 }
                 else {                                          //If it is not the start of the game
-                     setBets();                                 //No need to deal cards
+                    try {
+                        setBets();                                 //No need to deal cards
+                    } catch (FileNotFoundException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
 
-        raise.setOnAction(e -> raise());
+        raise.setOnAction(e -> {
+            try {
+                raise();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        moves.textProperty().addListener((ChangeListener<Object>) (observable, oldValue, newValue) -> {
+            moves.setScrollTop(Double.MAX_VALUE); //this will scroll to the bottom
+            //use Double.MIN_VALUE to scroll to the top
+        });
     }
 
     private void check() throws InterruptedException, FileNotFoundException {
-        movesText = movesText + "You check\n";
-        moves.setText(movesText);
+        moves.appendText("You check\n");
         if(!game.playerCheck()){
-            movesText = movesText + "Opponent checks\n";
-            moves.setText(movesText);
-            switch(game.getPhase()){
-                case 4://pre flop
-                    flop();
-                    break;
-                case 7: //pre turn
-                    turn();
-                    break;
-                case 10: //pre river
-                    river();
-                    break;
-                case 13://compare hands
-                    compare();
-                    break;
-            }
+            //playerCheck() returns a boolean, opponentRaise
+            //if false, CPU calls
+            //if true. CPU Raises
+            moves.appendText("CPU checks\n");
+            continueGame();
         } else {
             //player checks, opponent raises
 
+        }
+    }
+
+    private void continueGame() throws FileNotFoundException {
+        switch(game.getPhase()){
+            case 4://pre flop
+                flop();
+                break;
+            case 7: //pre turn
+                turn();
+                break;
+            case 10: //pre river
+                river();
+                break;
+            case 13://compare hands
+                compare();
+                break;
         }
     }
 
@@ -184,7 +205,15 @@ class Controller {
 
     }
 
-    private void raise(){
+    private void raise() throws InterruptedException {
+        moves.appendText("Player raises $" + game.getPlayerBet() + "\n");
+        setBetControlVisibility(true);
+        setButtonVisibility(false);
+        if(!game.playerRaise()){
+            moves.appendText("CPU Calls\n");
+        } else{
+            moves.appendText("CPU Raises\n");
+        }
 
     }
 
@@ -202,14 +231,9 @@ class Controller {
         pot_total.setText("");
         play.setVisible(false);
         clearTable();
-        movesText = "";
-        setMovesTextGUI(movesText);
+        moves.setText("");
         game.play();
         setBetControlVisibility(true);
-    }
-
-    private void setMovesTextGUI(String input){
-        moves.setText(input);
     }
 
     private void deal() throws FileNotFoundException {
@@ -219,6 +243,7 @@ class Controller {
         playercard2.setImage(new Image(new FileInputStream(dealtCards.get(0).get(1).getImage())));
         oppcard1.setImage(new Image(new FileInputStream("src\\resources\\FACE_DOWN_CARD.png")));
         oppcard2.setImage(new Image(new FileInputStream("src\\resources\\FACE_DOWN_CARD.png")));
+        clearBets();
     }
 
     private void clearTable() throws FileNotFoundException {
@@ -236,13 +261,19 @@ class Controller {
         playercard2.setImage(no_card);
     }
 
-    private void setBets(){
+    private void setBets() throws FileNotFoundException {
+        if(game.didPlayerRaise()){
+            game.setDidPlayerRaise(false);
+            setButtonVisibility(true);
+        }
+
         System.out.println(game.getOpponentBet());
         your_bet.setText("$" + game.getPlayerBet());
         opponent_bet.setText("$" + game.getOpponentBet());
         player_bankroll.setText("$" + game.getPlayerMoney());
         opp_bankroll.setText("$" + game.getOpponentMoney());
         pot_total.setText("$" + game.getPotTotal());
+        continueGame();
     }
 
     private void clearBets(){
@@ -250,14 +281,20 @@ class Controller {
         opponent_bet.setText("");
 
     }
+
     private void setBetControlVisibility(Boolean b){
         bet_input.setVisible(b);
         bet_submit.setVisible(b);
     }
 
+    private void setButtonVisibility(boolean b){
+        check.setVisible(b);
+        raise.setVisible(b);
+        fold.setVisible(b);
+    }
+
     private void endGame(){
-        movesText += game.getGameOutcome();
-        setMovesTextGUI(movesText);
+        moves.appendText(game.getGameOutcome());
         play.setVisible(true);
     }
 

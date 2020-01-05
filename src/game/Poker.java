@@ -1,5 +1,4 @@
 package game;
-import java.io.IOException;
 import java.util.ArrayList;
 
 class Poker {
@@ -14,10 +13,14 @@ class Poker {
     private PokerHand oppHand;
     private int playerBet;
     private int opponentBet;
+    private int opponentRaise;
+    private int playerRaise;
     private int playerMoney;
     private int opponentMoney;
     private boolean fold = false;
     private int gamePhase = 0;
+    private boolean didPlayerRaise;
+    private boolean didCPURaise;
     private String gameOutcome;
     /*
     0 is the start, first bets
@@ -36,7 +39,7 @@ class Poker {
     13 is comparison
      */
 
-    Poker() throws IOException {
+    Poker() {
         this.pot = new Pot();
         playerMoney = 500;
         opponentMoney = 500;
@@ -52,7 +55,7 @@ class Poker {
         Ante();
     }
 
-    void Ante(){
+    private void Ante(){
         gamePhase++;
         System.out.println("Phase: " + gamePhase);
         /*Scanner input = new Scanner(System.in);
@@ -89,8 +92,8 @@ class Poker {
     }
 
      boolean playerCheck() throws InterruptedException {
-         gamePhase++;
-         System.out.println("Phase: " + gamePhase);
+        gamePhase++;
+        System.out.println("Phase: " + gamePhase);
         boolean opponentRaise = false;
         gamePhase++;
         System.out.println("Phase: " + gamePhase);
@@ -98,12 +101,33 @@ class Poker {
     }
 
     boolean playerRaise() throws InterruptedException {
+        didPlayerRaise = true;
         gamePhase++;
         System.out.println("Phase: " + gamePhase);
-        boolean opponentRaise = false;
-        gamePhase++;
-        System.out.println("Phase: " + gamePhase);
-        return opponentRaise;
+        switch(cpuCallFoldOrRaise()){
+            case 0:
+                opponentFold();
+                break;
+            case 1:
+                gamePhase++;
+                System.out.println("Phase: " + gamePhase);
+                return false;
+            case 2:
+                gamePhase++;
+                System.out.println("Phase: " + gamePhase);
+                opponentRaise = 10;
+                return true;
+        }
+        return false;
+    }
+
+    private int cpuCallFoldOrRaise(){
+        /*
+        0: Fold
+        1: Call
+        2: Raise
+         */
+        return 1;
     }
 
     ArrayList<Card> flop() {
@@ -148,6 +172,8 @@ class Poker {
                 opponentWin();
             } else {
                 //TODO: If highcards are equal, get second high card, if they are equal, split the pot
+                System.out.println("TIE");
+                playerWin();
             }
         }
     }
@@ -158,13 +184,13 @@ class Poker {
         opponentWin();
     }
 
-    void opponentFold(){
+    private void opponentFold(){
         fold = true;
         gameOutcome = "\nOpponent folds\n";
         playerWin();
     }
 
-    void playerWin(){
+    private void playerWin(){
         if(!fold) {
             gameOutcome = String.format("\nPlayer wins with a %s\n", playerHand.getHandType());
         }
@@ -172,12 +198,20 @@ class Poker {
         pot.resetPot();
     }
 
-    void opponentWin(){
+    private void opponentWin(){
         if(!fold){
             gameOutcome = String.format("\nOpponent wins with a %s\n", oppHand.getHandType());
         }
         opponentMoney += getPotTotal();
         pot.resetPot();
+    }
+
+    boolean didPlayerRaise(){
+        return didPlayerRaise;
+    }
+
+    void setDidPlayerRaise(boolean b){
+        didPlayerRaise = b;
     }
 
     int getPhase(){

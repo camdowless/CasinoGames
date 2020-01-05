@@ -1,5 +1,6 @@
 package game;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 class PokerHand {
@@ -44,7 +45,7 @@ class PokerHand {
         sortHand(cards7);
     }
 
-     void calcScore(ArrayList<Card> cards){
+     private void calcScore(ArrayList<Card> cards){
         printCards();
         sortHand(cards);
          handScore = 1;
@@ -89,11 +90,8 @@ class PokerHand {
      }
 
      boolean checkFullHouse(ArrayList<Card> cards) {
-        if(checkThreeOfAKind(cards) & checkPair(cards)){
-            return true;
-        }
-        return false;
-    }
+         return checkPairFH(cards) & checkThreeOfAKind(cards);
+     }
 
      boolean checkFourOfAKind(ArrayList<Card> cards) {
         return ofAKind(4, cards);
@@ -105,21 +103,22 @@ class PokerHand {
 
      boolean checkTwoPair(ArrayList<Card> cards){
         findPairCount(cards);
-        if(findPairCount(cards) >= 2){
-            return true;
-        }
-        return false;
-    }
+        return findPairCount(cards) >= 2;
+     }
 
      boolean checkPair(ArrayList<Card> cards){
         findPairCount(cards);
-        if(findPairCount(cards) == 1){
-            return true;
-        }
-        return false;
+         return findPairCount(cards) == 1;
+     }
+
+    private boolean checkPairFH(ArrayList<Card> cards){
+        //There is a bug with the game not being able to find Full Houses
+        //And I think this will fix it
+        int pc = findPairCount(cards);
+        return pc == 1 | pc == 2;
     }
 
-     String findHighCardRank(ArrayList<Card> cardList){
+     private String findHighCardRank(ArrayList<Card> cardList){
         Card high = new Card("", 0, "0");
         for(Card c : cardList){
             if(c.getValue() > high.getValue()){
@@ -171,21 +170,17 @@ class PokerHand {
         return false;
     }
 
-     boolean checkStraightFlush(ArrayList<Card> cards){
-        if(checkStraight(cards) & checkFlush(cards)){
-            return true;
-        }
-        return false;
-    }
+     private boolean checkStraightFlush(ArrayList<Card> cards){
+         return checkStraight(cards) & checkFlush(cards);
+     }
 
      boolean checkStraight(ArrayList<Card> cards){
         sortHand(cards);
-        ArrayList<Card> copy = cards;
-        Set<Integer> set = new HashSet<>(copy.size());
-        copy.removeIf(p -> !set.add(p.getValue()));
+         Set<Integer> set = new HashSet<>(cards.size());
+        cards.removeIf(p -> !set.add(p.getValue()));
         try{
             for(int i = 0; i < 3; i++){
-                Card current = copy.get(i);
+                Card current = cards.get(i);
                 if(current.getValue() + 1 == cards.get(i + 1).getValue()){
                     if(cards.get(i + 1).getValue() + 1 == cards.get(i + 2).getValue()){
                         if(cards.get(i + 2).getValue() + 1 == cards.get(i + 3).getValue()){

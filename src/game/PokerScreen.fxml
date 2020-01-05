@@ -58,7 +58,7 @@
                <Font name="Franklin Gothic Medium" size="19.0" />
            </font>
        </Button>
-       <Label fx:id="opp_bankroll" layoutX="237.0" layoutY="23.0">
+       <Label fx:id="opp_bankroll" layoutX="576.0" layoutY="26.0">
            <font>
                <Font name="Franklin Gothic Medium" size="20.0" />
            </font>
@@ -103,7 +103,7 @@
              <Font name="Franklin Gothic Medium" size="36.0" />
            </font>
        </Button>
-       <TextArea fx:id="moves" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" />
+       <TextArea fx:id="moves" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="270.0" />
       <TextField fx:id="bet_input" layoutX="666.0" layoutY="540.0" promptText="Enter bet">
          <font>
             <Font name="Franklin Gothic Medium" size="19.0" />
