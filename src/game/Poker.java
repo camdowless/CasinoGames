@@ -13,6 +13,7 @@ class Poker {
     private PokerHand oppHand;
     private int playerBet;
     private int opponentBet;
+    private boolean didPlayerFold;
     private int opponentRaise;
     private int playerRaise;
     private int playerMoney;
@@ -51,6 +52,8 @@ class Poker {
         flopCards.clear();
         turnCard = null;
         riverCard = null;
+        didPlayerFold = false;
+        fold = false;
         gamePhase = 0;
         Ante();
     }
@@ -94,10 +97,20 @@ class Poker {
      boolean playerCheck() throws InterruptedException {
         gamePhase++;
         System.out.println("Phase: " + gamePhase);
-        boolean opponentRaise = false;
-        gamePhase++;
-        System.out.println("Phase: " + gamePhase);
-        return opponentRaise;
+        switch(cpuCheckFoldOrRaise()){
+            case 0:
+                opponentFold();
+                break;
+            case 1:
+                gamePhase++;
+                System.out.println("Phase: " + gamePhase);
+                return false;
+            case 2:
+                gamePhase++;
+                System.out.println("Phase: " + gamePhase);
+                return true;
+        }
+        return false;
     }
 
     boolean playerRaise() throws InterruptedException {
@@ -121,13 +134,33 @@ class Poker {
         return false;
     }
 
+    private int cpuCheckFoldOrRaise(){
+        cpuWait();
+        /*
+        0: Fold
+        1: Check
+        2: Raise
+         */
+        return 1;
+    }
     private int cpuCallFoldOrRaise(){
+        cpuWait();
         /*
         0: Fold
         1: Call
         2: Raise
          */
         return 1;
+    }
+
+    void cpuWait(){
+        new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     ArrayList<Card> flop() {
@@ -179,7 +212,7 @@ class Poker {
     }
 
     void playerFold(){
-        fold = true;
+        didPlayerFold = true;
         gameOutcome = "\nPlayer folds\n";
         opponentWin();
     }
@@ -199,7 +232,7 @@ class Poker {
     }
 
     private void opponentWin(){
-        if(!fold){
+        if(!didPlayerFold){
             gameOutcome = String.format("\nOpponent wins with a %s\n", oppHand.getHandType());
         }
         opponentMoney += getPotTotal();

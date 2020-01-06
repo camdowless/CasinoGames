@@ -245,15 +245,18 @@ public class HandTest {
         cards2.add(new Card("CLUBS", 2, "2"));
         cards2.add(new Card("CLUBS", 5, "5"));
         cards2.add(new Card("HEARTS", 9, "9"));
-        cards2.add(new Card("SPADES", 10, "J"));
-        cards2.add(new Card("HEARTS", 13, "K"));
+        cards2.add(new Card("SPADES", 8, "8"));
+        cards2.add(new Card("HEARTS", 8, "8"));
         cards2.add(new Card("SPADES", 3, "3"));
         cards2.add(new Card("CLUBS", 8, "8"));
         notFullHouse.setCards(cards2);
 
+        fullHouse.calcScore(cards);
+        Assert.assertTrue(fullHouse.checkFullHouse());
+        Assert.assertEquals(7, fullHouse.getHandScore());
 
-        Assert.assertTrue(fullHouse.checkFullHouse(cards));
-        Assert.assertFalse(notFullHouse.checkFullHouse(cards2));
+        notFullHouse.calcScore(cards2);
+        Assert.assertFalse(notFullHouse.checkFullHouse());
     }
 
 }

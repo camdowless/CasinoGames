@@ -6,6 +6,7 @@ import java.util.*;
 class PokerHand {
     private ArrayList<Card> cards7 = new ArrayList<>();
     private int handScore;
+    int full_house;
     private String handType;
     private String highCardRank;
     private int highCardValue;
@@ -27,6 +28,7 @@ class PokerHand {
      */
 
     PokerHand(ArrayList<Card> hand, ArrayList<Card> flop, Card turn, Card river){
+        full_house = 0;
         this.hand = hand;
         this.flop = flop;
         this.turn = turn;
@@ -42,39 +44,42 @@ class PokerHand {
     }
 
     PokerHand(){
+        full_house = 0;
         sortHand(cards7);
     }
 
-     private void calcScore(ArrayList<Card> cards){
+      void calcScore(ArrayList<Card> cards){
         printCards();
         sortHand(cards);
          handScore = 1;
          handType = String.format("High card %s", highCardRank);
          if(checkPair(cards)){
+             full_house++;
              handScore = 2;
              handType = "Pair";
-         } else if(checkTwoPair(cards)){
+         } if(checkTwoPair(cards)){
              handScore = 3;
              handType = "Two Pair";
-         } else if(checkThreeOfAKind(cards)){
+         } if(checkThreeOfAKind(cards)){
+             full_house++;
              handScore = 4;
              handType = "Three of a Kind";
-         } else if(checkStraight(cards)){
+         } if(checkStraight(cards)){
              handScore = 5;
              handType = "Straight";
-         } else if(checkFlush(cards)){
+         } if(checkFlush(cards)){
              handScore = 6;
              handType = "Flush";
-         } else if(checkFullHouse(cards)){
+         } if(checkFullHouse()){
              handScore = 7;
              handType = "Full House";
-         } else if(checkFourOfAKind(cards)){
+         } if(checkFourOfAKind(cards)){
              handScore = 8;
              handType = "Four of a Kind";
-         } else if(checkStraightFlush(cards)){
+         } if(checkStraightFlush(cards)){
              handScore = 9;
              handType = "Straight Flush";
-         } else if(checkRoyalFlush(cards)){
+         } if(checkRoyalFlush(cards)){
              handScore = 10;
              handType = "Royal Flush";
          }
@@ -89,8 +94,8 @@ class PokerHand {
          }
      }
 
-     boolean checkFullHouse(ArrayList<Card> cards) {
-         return checkPairFH(cards) & checkThreeOfAKind(cards);
+     boolean checkFullHouse() {
+         return full_house == 2;
      }
 
      boolean checkFourOfAKind(ArrayList<Card> cards) {
@@ -115,10 +120,10 @@ class PokerHand {
         //There is a bug with the game not being able to find Full Houses
         //And I think this will fix it
         int pc = findPairCount(cards);
-        return pc == 1 | pc == 2;
+        return pc == 1 | pc == 2 | pc == 3;
     }
 
-     private String findHighCardRank(ArrayList<Card> cardList){
+    private String findHighCardRank(ArrayList<Card> cardList){
         Card high = new Card("", 0, "0");
         for(Card c : cardList){
             if(c.getValue() > high.getValue()){

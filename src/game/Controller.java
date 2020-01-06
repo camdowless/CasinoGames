@@ -139,10 +139,6 @@ class Controller {
             }
         });
 
-        moves.textProperty().addListener((ChangeListener<Object>) (observable, oldValue, newValue) -> {
-            moves.setScrollTop(Double.MAX_VALUE); //this will scroll to the bottom
-            //use Double.MIN_VALUE to scroll to the top
-        });
     }
 
     private void check() throws InterruptedException, FileNotFoundException {
@@ -223,15 +219,13 @@ class Controller {
     }
 
     private void play() throws IOException {
-        check.setVisible(true);
-        raise.setVisible(true);
-        fold.setVisible(true);
+
         player_bankroll.setText("$" + game.getPlayerMoney());
         opp_bankroll.setText("$" + game.getOpponentMoney());
         pot_total.setText("");
         play.setVisible(false);
         clearTable();
-        moves.setText("");
+        moves.appendText("");
         game.play();
         setBetControlVisibility(true);
     }
@@ -262,6 +256,7 @@ class Controller {
     }
 
     private void setBets() throws FileNotFoundException {
+        setButtonVisibility(true);
         if(game.didPlayerRaise()){
             game.setDidPlayerRaise(false);
             setButtonVisibility(true);
@@ -295,6 +290,9 @@ class Controller {
 
     private void endGame(){
         moves.appendText(game.getGameOutcome());
+        moves.setScrollTop(Double.MAX_VALUE);
+
+        setButtonVisibility(false);
         play.setVisible(true);
     }
 
