@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="493.0" prefWidth="706.0" style="-fx-background-color: #D8887B;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Button fx:id="go" layoutX="309.0" layoutY="14.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="88.0" text="GO">
+            <font>
+                <Font name="Constantia" size="25.0" />
+            </font>
+        </Button>
+        <RadioButton fx:id="selRed" layoutX="32.0" layoutY="123.0" mnemonicParsing="false" text="Red" textFill="RED">
+            <font>
+                <Font name="Constantia" size="15.0" fx:id="x1" />
+            </font>
+            <toggleGroup>
+                <ToggleGroup fx:id="colors" />
+            </toggleGroup>
+        </RadioButton>
+        <RadioButton fx:id="selBlack" font="$x1" layoutX="32.0" layoutY="88.0" mnemonicParsing="false" text="Black" toggleGroup="$colors" />
+        <RadioButton fx:id="selGreen" font="$x1" layoutX="32.0" layoutY="155.0" mnemonicParsing="false" text="Green" textFill="#00da00" toggleGroup="$colors" />
+        <ImageView fitHeight="400.0" fitWidth="400.0" layoutX="153.0" layoutY="79.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@roulette_wheel.png" />
+            </image>
+        </ImageView>
+        <Circle fill="#9e2a2a" layoutX="353.0" layoutY="279.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_28" fill="WHITE" layoutX="270.0" layoutY="151.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_11" fill="WHITE" layoutX="367.0" layoutY="126.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_30" fill="WHITE" layoutX="341.0" layoutY="126.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_26" fill="WHITE" layoutX="315.0" layoutY="130.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_9" fill="WHITE" layoutX="291.0" layoutY="138.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_13" fill="WHITE" layoutX="487.0" layoutY="351.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_36" fill="WHITE" layoutX="498.0" layoutY="327.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_24" fill="WHITE" layoutX="504.0" layoutY="304.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_3" fill="WHITE" layoutX="505.0" layoutY="279.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_15" fill="WHITE" layoutX="504.0" layoutY="254.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_34" fill="WHITE" layoutX="497.0" layoutY="228.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_22" fill="WHITE" layoutX="485.0" layoutY="204.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_5" fill="WHITE" layoutX="471.0" layoutY="183.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_17" fill="WHITE" layoutX="455.0" layoutY="165.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_32" fill="WHITE" layoutX="436.0" layoutY="151.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_20" fill="WHITE" layoutX="413.0" layoutY="138.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_7" fill="WHITE" layoutX="392.0" layoutY="131.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_1" fill="WHITE" layoutX="475.0" layoutY="372.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="green_00" fill="WHITE" layoutX="455.0" layoutY="392.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_10" fill="WHITE" layoutX="414.0" layoutY="419.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_27" fill="WHITE" layoutX="436.0" layoutY="406.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_12" fill="WHITE" layoutX="341.0" layoutY="432.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_29" fill="WHITE" layoutX="366.0" layoutY="432.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_25" fill="WHITE" layoutX="390.0" layoutY="427.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_6" fill="WHITE" layoutX="232.0" layoutY="372.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_18" fill="WHITE" layoutX="251.0" layoutY="392.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_31" fill="WHITE" layoutX="270.0" layoutY="407.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_19" fill="WHITE" layoutX="293.0" layoutY="419.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_8" fill="WHITE" layoutX="317.0" layoutY="427.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_2" fill="WHITE" layoutX="232.0" layoutY="184.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_14" fill="WHITE" layoutX="218.0" layoutY="205.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_35" fill="WHITE" layoutX="209.0" layoutY="228.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_23" fill="WHITE" layoutX="201.0" layoutY="253.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="black_4" fill="WHITE" layoutX="200.0" layoutY="278.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_16" fill="WHITE" layoutX="202.0" layoutY="303.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle id="red_33" fx:id="black_33" fill="WHITE" layoutX="208.0" layoutY="327.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="red_21" fill="WHITE" layoutX="218.0" layoutY="351.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="green_0" fill="WHITE" layoutX="250.0" layoutY="165.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+        <TextField fx:id="bet" layoutX="153.0" layoutY="22.0" prefHeight="31.0" prefWidth="67.0" promptText="Bet" />
+        <Label fx:id="user" layoutX="635.0" layoutY="12.0" prefHeight="20.0" prefWidth="63.0" text="User" />
+        <Label fx:id="money" layoutX="635.0" layoutY="33.0" prefHeight="20.0" prefWidth="63.0" text="Money" />
+        <Label fx:id="winlose" layoutX="591.0" layoutY="136.0" prefHeight="75.0" prefWidth="101.0" />
+        <Button fx:id="close" layoutX="26.0" layoutY="14.0" mnemonicParsing="false" text="Return" />
+    </children>
+</AnchorPane>

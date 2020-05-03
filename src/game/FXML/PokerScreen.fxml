@@ -10,47 +10,47 @@
    <children>
        <ImageView fx:id="playercard1" fitHeight="153.0" fitWidth="98.0" layoutX="344.0" layoutY="515.0" pickOnBounds="true" preserveRatio="true">
           <image>
-              <Image url="@../../../Poker/src/resources/FACE_DOWN_CARD.png" />
+              <Image url="@../../resources/FACE_DOWN_CARD.png" />
           </image>
        </ImageView>
        <ImageView fx:id="playercard2" fitHeight="153.0" fitWidth="98.0" layoutX="451.0" layoutY="515.0" pickOnBounds="true" preserveRatio="true">
           <image>
-              <Image url="@../../../Poker/src/resources/FACE_DOWN_CARD.png" />
+              <Image url="@../../resources/FACE_DOWN_CARD.png" />
           </image>
        </ImageView>
        <ImageView fx:id="flop3" fitHeight="153.0" fitWidth="98.0" layoutX="409.0" layoutY="265.0" pickOnBounds="true" preserveRatio="true">
           <image>
-              <Image url="@../../../Poker/src/resources/FACE_DOWN_CARD.png" />
+              <Image url="@../../resources/FACE_DOWN_CARD.png" />
           </image>
        </ImageView>
        <ImageView fx:id="flop2" fitHeight="153.0" fitWidth="98.0" layoutX="304.0" layoutY="265.0" pickOnBounds="true" preserveRatio="true">
           <image>
-              <Image url="@../../../Poker/src/resources/FACE_DOWN_CARD.png" />
+              <Image url="@../../resources/FACE_DOWN_CARD.png" />
           </image>
        </ImageView>
        <ImageView fx:id="flop1" fitHeight="153.0" fitWidth="98.0" layoutX="200.0" layoutY="265.0" pickOnBounds="true" preserveRatio="true">
           <image>
-              <Image url="@../../../Poker/src/resources/FACE_DOWN_CARD.png" />
+              <Image url="@../../resources/FACE_DOWN_CARD.png" />
           </image>
        </ImageView>
        <ImageView fx:id="oppcard2" fitHeight="153.0" fitWidth="98.0" layoutX="451.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
           <image>
-              <Image url="@../../../Poker/src/resources/FACE_DOWN_CARD.png" />
+              <Image url="@../../resources/FACE_DOWN_CARD.png" />
           </image>
        </ImageView>
        <ImageView fx:id="oppcard1" fitHeight="153.0" fitWidth="98.0" layoutX="344.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
           <image>
-              <Image url="@../../../Poker/src/resources/FACE_DOWN_CARD.png" />
+              <Image url="@../../resources/FACE_DOWN_CARD.png" />
           </image>
        </ImageView>
        <ImageView fx:id="river" fitHeight="153.0" fitWidth="98.0" layoutX="617.0" layoutY="265.0" pickOnBounds="true" preserveRatio="true">
           <image>
-              <Image url="@../../../Poker/src/resources/FACE_DOWN_CARD.png" />
+              <Image url="@../../resources/FACE_DOWN_CARD.png" />
           </image>
        </ImageView>
        <ImageView fx:id="turn" fitHeight="153.0" fitWidth="98.0" layoutX="513.0" layoutY="265.0" pickOnBounds="true" preserveRatio="true">
           <image>
-              <Image url="@../../../Poker/src/resources/FACE_DOWN_CARD.png" />
+              <Image url="@../../resources/FACE_DOWN_CARD.png" />
           </image>
        </ImageView>
        <Button fx:id="hands" layoutX="14.0" layoutY="632.0" mnemonicParsing="false" text="Hands">

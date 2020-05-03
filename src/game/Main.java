@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException{
-        Controller controller = new Controller();
+        menu_Controller controller = new menu_Controller();
         controller.showStage();
     }
 

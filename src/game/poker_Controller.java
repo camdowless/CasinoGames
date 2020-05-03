@@ -1,22 +1,23 @@
 package game;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 
-class Controller {
+        import javafx.fxml.FXML;
+        import javafx.fxml.FXMLLoader;
+        import javafx.scene.Scene;
+        import javafx.scene.control.Button;
+        import javafx.scene.control.Label;
+        import javafx.scene.control.TextArea;
+        import javafx.scene.control.TextField;
+        import javafx.scene.image.Image;
+        import javafx.scene.image.ImageView;
+        import javafx.scene.input.KeyCode;
+        import javafx.stage.Stage;
+        import java.io.FileInputStream;
+        import java.io.FileNotFoundException;
+        import java.io.IOException;
+        import java.util.ArrayList;
+
+class poker_Controller {
+    private final menu_Controller menu_controller;
     @FXML
     private ImageView playercard1;
     @FXML
@@ -64,9 +65,11 @@ class Controller {
     private Poker game = new Poker();
     private final Stage thisStage;
 
-    Controller() throws IOException{
+    poker_Controller(menu_Controller menu_controller) throws IOException{
+        this.menu_controller = menu_controller;
         this.thisStage = new Stage();
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/game/PokerScreen.fxml"));
+
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/game/FXML/PokerScreen.fxml"));
         loader.setController(this);
         thisStage.setScene(new Scene(loader.load()));
         thisStage.setTitle("Poker");
@@ -139,6 +142,34 @@ class Controller {
             }
         });
 
+        bet_input.setOnKeyPressed(ke -> {
+            if (ke.getCode().equals(KeyCode.ENTER))
+            {
+                if(bet_input.getText() == null | checkBet(bet_input.getText())){
+                    game.setPlayerBet(Integer.parseInt(bet_input.getText())); //make this cleaner later, by making checkBet input string & return int
+                    setBetControlVisibility(false);
+                    if(game.getPhase() == 1){                       //If it is the start of the game,
+                        try {
+                            setBets();                                  //take and set bets , like normal
+                        } catch (FileNotFoundException ex) {
+                            ex.printStackTrace();
+                        }
+                        try {
+                            deal();                                 //And also deal the cards
+                        } catch (FileNotFoundException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    else {                                          //If it is not the start of the game
+                        try {
+                            setBets();                                 //No need to deal cards
+                        } catch (FileNotFoundException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void check() throws InterruptedException, FileNotFoundException {

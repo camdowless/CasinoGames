@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #40AF1C;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox layoutX="14.0" layoutY="14.0" prefHeight="100.0" prefWidth="572.0" spacing="100.0">
+            <children>
+                <Button fx:id="close" mnemonicParsing="false" prefWidth="90.0" text="Return" />
+                <Label prefHeight="100.0" prefWidth="230.0" text="Blackjack" textAlignment="CENTER" textOverrun="CLIP" underline="false" wrapText="false" HBox.hgrow="ALWAYS">
+                    <font>
+                        <Font name="Arial Black" size="32.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="40.0" />
+                    </HBox.margin>
+                </Label>
+                <VBox fillWidth="true" prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <Label fx:id="user" prefHeight="21.0" prefWidth="101.0" text="USER" />
+                        <Label fx:id="money" prefHeight="21.0" prefWidth="100.0" text="FUNDS" />
+                    </children>
+                    <padding>
+                        <Insets left="25.0" top="50.0" />
+                    </padding>
+                </VBox>
+            </children>
+        </HBox>
+        <Button fx:id="play" layoutX="264.0" layoutY="106.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="73.0" text="Play!" />
+        <GridPane layoutX="22.0" layoutY="141.0" prefHeight="198.0" prefWidth="185.0">
+            <children>
+                <ImageView fx:id="player_card_1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <ImageView fx:id="player_card_2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <ImageView fx:id="player_card_3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                <ImageView fx:id="player_card_4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                <ImageView fx:id="player_card_5" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+            </children>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+        </GridPane>
+        <GridPane layoutX="368.0" layoutY="141.0" prefHeight="198.0" prefWidth="185.0">
+            <children>
+                <ImageView fx:id="dealer_card_1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <ImageView fx:id="dealer_card_2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <ImageView fx:id="dealer_card_3" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                <ImageView fx:id="dealer_card_4" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                <ImageView fx:id="dealer_card_5" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+            </children>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+        </GridPane>
+        <Button fx:id="hit" layoutX="215.0" layoutY="341.0" mnemonicParsing="false" text="Hit" visible="false" />
+        <Button fx:id="stand" layoutX="264.0" layoutY="340.0" mnemonicParsing="false" text="Stand" visible="false" />
+        <Button fx:id="split" layoutX="326.0" layoutY="341.0" mnemonicParsing="false" text="Split" visible="false" />
+        <TextField fx:id="bet_amount" layoutX="201.0" layoutY="177.0" prefWidth="200.0" visible="false" />
+        <Button fx:id="bet" layoutX="280.0" layoutY="201.0" mnemonicParsing="false" text="Bet" visible="false" />
+        <Text fx:id="bet_text" layoutX="288.0" layoutY="152.0" scaleX="7.606299015329775" scaleY="3.2596995878564545" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter bet amount." visible="false">
+            <font>
+                <Font size="5.0" />
+            </font>
+        </Text>
+    </children>
+</AnchorPane>

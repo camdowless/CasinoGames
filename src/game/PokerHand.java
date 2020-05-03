@@ -1,6 +1,5 @@
 package game;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 class PokerHand {
@@ -48,7 +47,7 @@ class PokerHand {
         sortHand(cards7);
     }
 
-      void calcScore(ArrayList<Card> cards){
+    void calcScore(ArrayList<Card> cards){
         printCards();
         sortHand(cards);
          handScore = 1;
@@ -85,33 +84,69 @@ class PokerHand {
          }
      }
 
-     void calc2Score(ArrayList<Card> cards){
-         handScore = 1;
-         handType = String.format("High card %s", highCardRank);
-         if(checkPair(cards)){
-             handScore = 2;
-             handType = "Pair";
-         }
+    void calc2Score(ArrayList<Card> cards){
+        int pocketScore[][] = new int[13][13];
+        pocketScore[0][0] = 85; //AA
+        pocketScore[0][1] = 66; //AK
+        pocketScore[0][2] = 65; //AQ
+        pocketScore[0][3] = 65; //AJ
+        pocketScore[0][4] = 64; //AT
+        pocketScore[0][5] = 62; //A9
+        pocketScore[0][6] = 61; //A8
+        pocketScore[0][7] = 60; //A7
+        pocketScore[0][8] = 59; //A6
+        pocketScore[0][9] = 60; //A5
+        pocketScore[0][10] = 59; //A4
+        pocketScore[0][11] = 58; //A3
+        pocketScore[0][12] = 57; //A2
+
+        pocketScore[1][0] = 68; //KA
+        pocketScore[1][1] = 83; //KK
+        pocketScore[1][2] = 62; //KQ
+        pocketScore[1][3] = 62; //KJ
+        pocketScore[1][4] = 61; //KT
+        pocketScore[1][5] = 59; //K9
+        pocketScore[1][6] = 58; //K8
+        pocketScore[1][7] = 57; //K7
+        pocketScore[1][8] = 56; //K6
+        pocketScore[1][9] = 55; //K5
+        pocketScore[1][10] = 54; //K4
+        pocketScore[1][11] = 54; //K3
+        pocketScore[1][12] = 53; //K2
+
+        pocketScore[2][0] = 00; //QA
+        pocketScore[2][1] = 83; //QK
+        pocketScore[2][2] = 62; //QQ
+        pocketScore[2][3] = 62; //QJ
+        pocketScore[2][4] = 61; //QT
+        pocketScore[2][5] = 59; //Q9
+        pocketScore[2][6] = 58; //Q8
+        pocketScore[2][7] = 57; //Q7
+        pocketScore[2][8] = 56; //Q6
+        pocketScore[2][9] = 55; //Q5
+        pocketScore[2][10] = 54; //Q4
+        pocketScore[2][11] = 54; //Q3
+        pocketScore[2][12] = 53; //Q2
      }
 
-     boolean checkFullHouse() {
+    boolean checkFullHouse() {
          return full_house == 2;
      }
 
-     boolean checkFourOfAKind(ArrayList<Card> cards) {
+    boolean checkFourOfAKind(ArrayList<Card> cards) {
         return ofAKind(4, cards);
     }
 
-     boolean checkThreeOfAKind(ArrayList<Card> cards){
+    boolean checkThreeOfAKind(ArrayList<Card> cards){
         return ofAKind(3, cards);
     }
 
-     boolean checkTwoPair(ArrayList<Card> cards){
+    boolean checkTwoPair(ArrayList<Card> cards){
         findPairCount(cards);
         return findPairCount(cards) >= 2;
      }
 
-     boolean checkPair(ArrayList<Card> cards){
+    boolean checkPair(ArrayList<Card> cards){
         findPairCount(cards);
          return findPairCount(cards) == 1;
      }
@@ -144,7 +179,7 @@ class PokerHand {
         return high.getValue();
     }
 
-     boolean checkRoyalFlush(ArrayList<Card> cards){
+    boolean checkRoyalFlush(ArrayList<Card> cards){
         sortHand(cards);
         int index= 0;
         String suit;
@@ -175,11 +210,11 @@ class PokerHand {
         return false;
     }
 
-     private boolean checkStraightFlush(ArrayList<Card> cards){
+    private boolean checkStraightFlush(ArrayList<Card> cards){
          return checkStraight(cards) & checkFlush(cards);
      }
 
-     boolean checkStraight(ArrayList<Card> cards){
+    boolean checkStraight(ArrayList<Card> cards){
         sortHand(cards);
          Set<Integer> set = new HashSet<>(cards.size());
         cards.removeIf(p -> !set.add(p.getValue()));
@@ -202,11 +237,11 @@ class PokerHand {
         return false;
     }
 
-     boolean isPair(Card c1, Card c2){
+    boolean isPair(Card c1, Card c2){
         return c1.getValue() == c2.getValue();
     }
 
-     boolean checkFlush(ArrayList<Card> cards){
+    boolean checkFlush(ArrayList<Card> cards){
         int heartCount = 0;
         int diamondCount = 0;
         int clubCount = 0;
@@ -233,7 +268,7 @@ class PokerHand {
         return false;
     }
 
-     boolean ofAKind(int amount, ArrayList<Card> cards){
+    boolean ofAKind(int amount, ArrayList<Card> cards){
         HashMap<String, Integer> pairs = new HashMap<>();
         for(Card c : cards){
             if(!pairs.containsKey(c.getRank())){
@@ -255,7 +290,7 @@ class PokerHand {
         return false;
     }
 
-     int findPairCount(ArrayList<Card> cards){
+    int findPairCount(ArrayList<Card> cards){
         int pairCount = 0;
         HashMap<String, Integer> pairs = new HashMap<>();
         for(Card c : cards){
@@ -278,7 +313,7 @@ class PokerHand {
         return pairCount;
     }
 
-     void sortHand(ArrayList<Card> cards){
+    void sortHand(ArrayList<Card> cards){
         cards.sort(Card::compareTo);
     }
 
