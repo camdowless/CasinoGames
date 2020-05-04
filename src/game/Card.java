@@ -23,6 +23,9 @@ class Card{
         return this.rank;
     }
 
+    String getName(){
+        return rank + "_" + suit;
+    }
 
     String getImage() {
         return "src\\resources\\" + rank + "_" + suit + ".png";

@@ -56,13 +56,13 @@ class menu_Controller {
         user.setText(player.get_name());
         money.setText(player.get_money().toString());
 
-       /* blackjack.setOnAction(e-> {
+       blackjack.setOnAction(e-> {
             try {
                 open_blackjack();
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
-        });*/
+       });
         roulette.setOnAction(e-> {
             try {
                 open_roulette();
@@ -79,11 +79,11 @@ class menu_Controller {
         });
     }
 
-    /*private void open_blackjack() throws IOException {
-        blackjack_Controller controller = new blackjack_Controller(this);
+    private void open_blackjack() throws Exception {
+        blackjack_Controller controller = new blackjack_Controller();
         thisStage.hide();
         controller.showStage();
-    } */
+    }
 
     private void open_roulette() throws IOException {
         roulette_Controller controller = new roulette_Controller(this);
